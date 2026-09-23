@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Engineering Class Study Vault | Student Portal</title>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background Ambient Glows -->
+  <div class="glow-sphere glow-1"></div>
+  <div class="glow-sphere glow-2"></div>
+
+  <!-- Main Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">CR Study Vault</span>
+          <span class="brand-subtitle">Engineering Batch Portal</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <div class="stat-badge" id="statsCounter">
+          <i class="fa-solid fa-layer-group"></i>
+          <span><strong id="totalResourcesCount">0</strong> Resources</span>
+        </div>
+        
+        <!-- Admin Access Button -->
+        <button class="btn btn-admin" id="openAdminBtn" title="Class Representative Access">
+          <i class="fa-solid fa-lock"></i>
+          <span>CR Admin</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="badge-tag">Academic Resources & Notes</div>
+      <h1 class="hero-title">Access All Lecture Notes, Labs & PYQs</h1>
+      <p class="hero-desc">
+        Curated repository maintained by your Class Representative. Search, filter, and access all study materials via direct Google Drive links.
+      </p>
+
+      <!-- Global Search Bar -->
+      <div class="search-box-wrapper">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Search by topic, unit, keyword (e.g. 'Calculus', 'Op-Amp', 'Prompting')..." 
+          autocomplete="off"
+        />
+        <button id="clearSearchBtn" class="clear-btn hidden" title="Clear search">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-container">
+
+    <!-- Filter Control Hub -->
+    <section class="filter-hub">
+      
+      <!-- Category Tabs -->
+      <div class="filter-group">
+        <label class="filter-label"><i class="fa-solid fa-shapes"></i> Category</label>
+        <div class="category-pills" id="categoryFilters">
+          <button class="pill active" data-category="All">
+            <i class="fa-solid fa-border-all"></i> All
+          </button>
+          <button class="pill" data-category="Notes">
+            <i class="fa-solid fa-book-open"></i> Notes
+          </button>
+          <button class="pill" data-category="Tutorials">
+            <i class="fa-solid fa-laptop-code"></i> Tutorials
+          </button>
+          <button class="pill" data-category="Lab Manuals/Images">
+            <i class="fa-solid fa-flask"></i> Lab Manuals/Images
+          </button>
+          <button class="pill" data-category="PYQs">
+            <i class="fa-solid fa-clock-rotate-left"></i> PYQs
+          </button>
+        </div>
+      </div>
+
+      <!-- Subject Filter Pills -->
+      <div class="filter-group">
+        <label class="filter-label"><i class="fa-solid fa-book-bookmark"></i> Subject</label>
+        <div class="subject-dropdown-wrapper">
+          <select id="subjectSelectFilter" class="custom-select">
+            <option value="All">All Subjects (6 Core Subjects)</option>
+            <option value="Applied Mathematics-I">Applied Mathematics-I</option>
+            <option value="Applied Chemistry">Applied Chemistry</option>
+            <option value="Fundamentals of Electronics Engineering">Fundamentals of Electronics Engineering</option>
+            <option value="Programming Languages">Programming Languages</option>
+            <option value="Artificial Intelligence and Prompt Engineering">Artificial Intelligence and Prompt Engineering</option>
+            <option value="Professional Communication and Technical Writing">Professional Communication and Technical Writing</option>
+          </select>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Active State Status -->
+    <div class="results-meta">
+      <span id="resultsCount">Showing all materials</span>
+      <button id="resetFiltersBtn" class="btn-text hidden">Reset Filters</button>
+    </div>
+
+    <!-- Cards Grid -->
+    <section class="resource-grid" id="resourceGrid">
+      <!-- Injected via JavaScript -->
+    </section>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="empty-state hidden">
+      <div class="empty-icon"><i class="fa-regular fa-folder-open"></i></div>
+      <h3>No study materials found</h3>
+      <p>Try refining your keyword search or switching to another category or subject filter.</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <p>&copy; Built for Engineering Batch by your Class Representative. Fully decentralized client-side portal.</p>
+    </div>
+  </footer>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. Admin Authentication Modal -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-shield-halved"></i> CR Admin Authorization</h3>
+        <button class="modal-close" data-close="authModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="authForm" class="modal-body">
+        <p class="modal-desc">Please enter your Class Representative Master PIN to manage study resources.</p>
+        <div class="form-group">
+          <label for="adminPinInput">Master PIN / Passcode</label>
+          <div class="input-icon-box">
+            <i class="fa-solid fa-key"></i>
+            <input type="password" id="adminPinInput" placeholder="Default: cr2026" required autofocus />
+          </div>
+          <small class="form-hint">Default passcode is <code>cr2026</code> (configurable in JS).</small>
+        </div>
+        <div class="form-error hidden" id="authErrorMsg">
+          <i class="fa-solid fa-triangle-exclamation"></i> Incorrect PIN. Access denied.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close="authModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Authorize</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Admin Dashboard Modal -->
+  <div class="modal-backdrop" id="adminDashboardModal">
+    <div class="modal-card modal-large">
+      <div class="modal-header">
+        <div class="dashboard-header-title">
+          <i class="fa-solid fa-sliders"></i>
+          <div>
+            <h3>CR Resource Management Dashboard</h3>
+            <span class="badge-live"><i class="fa-solid fa-circle"></i> Authorized</span>
+          </div>
+        </div>
+        <div class="dashboard-header-actions">
+          <button class="btn btn-outline-danger btn-sm" id="adminLogoutBtn">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+          </button>
+          <button class="modal-close" data-close="adminDashboardModal"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="tab-btn active" data-tab="addResourceTab">
+          <i class="fa-solid fa-plus"></i> Add New Resource
+        </button>
+        <button class="tab-btn" data-tab="manageResourcesTab">
+          <i class="fa-solid fa-list-check"></i> Manage Items (<span id="adminTotalItems">0</span>)
+        </button>
+        <button class="tab-btn" data-tab="exportDataTab">
+          <i class="fa-solid fa-download"></i> Permanent Export / Backup
+        </button>
+      </div>
+
+      <div class="modal-body admin-modal-body">
+        
+        <!-- Tab 1: Add New Resource Form -->
+        <div class="tab-panel active" id="addResourceTab">
+          <form id="addResourceForm" class="admin-form">
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label for="resSubject"><i class="fa-solid fa-book"></i> Subject <span class="req">*</span></label>
+                <select id="resSubject" required class="custom-select">
+                  <option value="" disabled selected>Select Subject</option>
+                  <option value="Applied Mathematics-I">Applied Mathematics-I</option>
+                  <option value="Applied Chemistry">Applied Chemistry</option>
+                  <option value="Fundamentals of Electronics Engineering">Fundamentals of Electronics Engineering</option>
+                  <option value="Programming Languages">Programming Languages</option>
+                  <option value="Artificial Intelligence and Prompt Engineering">Artificial Intelligence and Prompt Engineering</option>
+                  <option value="Professional Communication and Technical Writing">Professional Communication and Technical Writing</option>
+                </select>
+              </div>
+
+              <div class="form-group flex-1">
+                <label for="resCategory"><i class="fa-solid fa-tag"></i> Category <span class="req">*</span></label>
+                <select id="resCategory" required class="custom-select">
+                  <option value="" disabled selected>Select Category</option>
+                  <option value="Notes">Notes</option>
+                  <option value="Tutorials">Tutorials</option>
+                  <option value="Lab Manuals/Images">Lab Manuals/Images</option>
+                  <option value="PYQs">PYQs</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="resTitle"><i class="fa-solid fa-heading"></i> Resource Title <span class="req">*</span></label>
+              <input type="text" id="resTitle" placeholder="e.g., Unit-3 Multiple Integrals Complete Handwritten Notes" required />
+            </div>
+
+            <div class="form-group">
+              <label for="resDesc"><i class="fa-solid fa-align-left"></i> Description / Topic Details</label>
+              <textarea id="resDesc" rows="3" placeholder="Provide quick notes, chapter list, professor name, or exam significance..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="resDriveUrl"><i class="fa-brands fa-google-drive"></i> Google Drive URL <span class="req">*</span></label>
+              <input type="url" id="resDriveUrl" placeholder="https://drive.google.com/file/d/... or folder link" required />
+              <small class="form-hint">Make sure access permission on Drive is set to <strong>"Anyone with the link can view"</strong>.</small>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-submit">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Publish Resource
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Tab 2: Manage Existing Resources -->
+        <div class="tab-panel" id="manageResourcesTab">
+          <div class="manage-table-container">
+            <table class="manage-table">
+              <thead>
+                <tr>
+                  <th>Title & Subject</th>
+                  <th>Category</th>
+                  <th>Drive Link</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminManageList">
+                <!-- Dynamically generated rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab 3: Export & Permanent Persistence -->
+        <div class="tab-panel" id="exportDataTab">
+          <div class="export-box">
+            <h4><i class="fa-solid fa-code"></i> Persist Data Permanently to GitHub / Codebase</h4>
+            <p>
+              Newly added resources in this session are immediately saved to this browser's <code>localStorage</code>.
+              To deploy these changes permanently for all students on GitHub Pages, download the updated JSON or copy the array into <code>script.js</code>.
+            </p>
+            <div class="export-actions">
+              <button class="btn btn-primary" id="downloadJsonBtn">
+                <i class="fa-solid fa-file-arrow-down"></i> Download data.json
+              </button>
+              <button class="btn btn-secondary" id="copyCodeBtn">
+                <i class="fa-regular fa-clipboard"></i> Copy JS Data Array
+              </button>
+              <button class="btn btn-outline-danger" id="resetDefaultBtn">
+                <i class="fa-solid fa-arrow-rotate-left"></i> Reset to Factory Mock Data
+              </button>
+            </div>
+            <div class="code-preview-wrapper">
+              <pre><code id="jsonCodePreview">// JSON representation will be previewed here</code></pre>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Hub -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
