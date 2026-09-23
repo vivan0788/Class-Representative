@@ -159,7 +159,7 @@ const INITIAL_RESOURCES = [
   }
 ];
 
-const MASTER_ADMIN_PIN = "cr2026";
+const MASTER_ADMIN_PIN = "Avinash0788";
 
 let state = {
   resources: [],
