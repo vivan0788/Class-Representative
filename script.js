@@ -1,15 +1,27 @@
 /**
- * ============================================================================
  * Engineering Class Study Vault - script.js
- * Complete Vanilla JavaScript Implementation (Fully Fixed & Defensive)
- * ============================================================================
+ * Connected with Google Firebase Realtime Cloud Database
  */
 
-// 1. Initial Mock Dataset (6 Core Engineering Subjects)
+// 1. Firebase Configuration (Aapke project ki exact keys)
+const firebaseConfig = {
+  apiKey: "AIzaSyDy54r8Wv4fTLUwMQqYCeqXd1cZiTrfcic",
+  authDomain: "class-representative-1f3f3.firebaseapp.com",
+  databaseURL: "https://class-representative-1f3f3-default-rtdb.firebaseio.com",
+  projectId: "class-representative-1f3f3",
+  storageBucket: "class-representative-1f3f3.firebasestorage.app",
+  messagingSenderId: "211962177584",
+  appId: "1:211962177584:web:a94c377ed840a98ac4ad85"
+};
+
+// Initialize Firebase App & Database Reference
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const resourcesRef = db.ref("study_resources");
+
+// 2. Default Academic Resources Seed
 const INITIAL_RESOURCES = [
-  // 1. Applied Mathematics-I
   {
-    id: "mth-001",
     subject: "Applied Mathematics-I",
     category: "Notes",
     title: "Unit 1: Differential Calculus & Curvature Detailed Notes",
@@ -18,7 +30,6 @@ const INITIAL_RESOURCES = [
     dateAdded: "2026-09-10"
   },
   {
-    id: "mth-002",
     subject: "Applied Mathematics-I",
     category: "Tutorials",
     title: "Eigenvalues, Eigenvectors & Cayley-Hamilton Problem Sheet",
@@ -27,7 +38,6 @@ const INITIAL_RESOURCES = [
     dateAdded: "2026-09-14"
   },
   {
-    id: "mth-003",
     subject: "Applied Mathematics-I",
     category: "PYQs",
     title: "Applied Maths-I Semester End-Term PYQ Pack (2022-2025)",
@@ -35,10 +45,7 @@ const INITIAL_RESOURCES = [
     driveUrl: "https://drive.google.com/file/d/demo-maths-pyqs/view",
     dateAdded: "2026-09-18"
   },
-
-  // 2. Applied Chemistry
   {
-    id: "chm-001",
     subject: "Applied Chemistry",
     category: "Notes",
     title: "Water Technology, Hardness & Lime-Soda Process",
@@ -47,7 +54,6 @@ const INITIAL_RESOURCES = [
     dateAdded: "2026-09-08"
   },
   {
-    id: "chm-002",
     subject: "Applied Chemistry",
     category: "Lab Manuals/Images",
     title: "Complete Chemistry Lab Manual with Observation Tables",
@@ -56,7 +62,6 @@ const INITIAL_RESOURCES = [
     dateAdded: "2026-09-12"
   },
   {
-    id: "chm-003",
     subject: "Applied Chemistry",
     category: "PYQs",
     title: "Applied Chemistry Mid-Term & Final PYQs with Solved Numericals",
@@ -64,10 +69,7 @@ const INITIAL_RESOURCES = [
     driveUrl: "https://drive.google.com/file/d/demo-chem-pyqs/view",
     dateAdded: "2026-09-19"
   },
-
-  // 3. Fundamentals of Electronics Engineering
   {
-    id: "ele-001",
     subject: "Fundamentals of Electronics Engineering",
     category: "Notes",
     title: "Semiconductor Diodes, Clipper/Clamper & Full-Wave Rectifiers",
@@ -76,7 +78,6 @@ const INITIAL_RESOURCES = [
     dateAdded: "2026-09-11"
   },
   {
-    id: "ele-002",
     subject: "Fundamentals of Electronics Engineering",
     category: "Tutorials",
     title: "BJT Biasing & Op-Amp Circuit Analysis Solved Problems",
@@ -85,7 +86,6 @@ const INITIAL_RESOURCES = [
     dateAdded: "2026-09-15"
   },
   {
-    id: "ele-003",
     subject: "Fundamentals of Electronics Engineering",
     category: "Lab Manuals/Images",
     title: "Electronics Hardware Kit Circuit Diagrams & DSO Graphs",
@@ -93,10 +93,7 @@ const INITIAL_RESOURCES = [
     driveUrl: "https://drive.google.com/file/d/demo-electronics-lab/view",
     dateAdded: "2026-09-20"
   },
-
-  // 4. Programming Languages
   {
-    id: "prg-001",
     subject: "Programming Languages",
     category: "Notes",
     title: "Pointers, Dynamic Memory Allocation & Structs in C/C++",
@@ -105,7 +102,6 @@ const INITIAL_RESOURCES = [
     dateAdded: "2026-09-05"
   },
   {
-    id: "prg-002",
     subject: "Programming Languages",
     category: "Tutorials",
     title: "100 DSA & Coding Logic Practice Questions with Test Cases",
@@ -114,7 +110,6 @@ const INITIAL_RESOURCES = [
     dateAdded: "2026-09-16"
   },
   {
-    id: "prg-003",
     subject: "Programming Languages",
     category: "Lab Manuals/Images",
     title: "Semester Programming Lab Assignments Solutions & Output Screenshots",
@@ -122,10 +117,7 @@ const INITIAL_RESOURCES = [
     driveUrl: "https://drive.google.com/file/d/demo-prog-lab/view",
     dateAdded: "2026-09-21"
   },
-
-  // 5. Artificial Intelligence and Prompt Engineering
   {
-    id: "aip-001",
     subject: "Artificial Intelligence and Prompt Engineering",
     category: "Notes",
     title: "Search Algorithms, Heuristics & Transformer Foundations",
@@ -134,7 +126,6 @@ const INITIAL_RESOURCES = [
     dateAdded: "2026-09-07"
   },
   {
-    id: "aip-002",
     subject: "Artificial Intelligence and Prompt Engineering",
     category: "Tutorials",
     title: "Systematic Prompt Engineering: Few-Shot, CoT & ReAct Frameworks",
@@ -143,7 +134,6 @@ const INITIAL_RESOURCES = [
     dateAdded: "2026-09-17"
   },
   {
-    id: "aip-003",
     subject: "Artificial Intelligence and Prompt Engineering",
     category: "Lab Manuals/Images",
     title: "Python AI & LLM API Integration Lab Notebooks (Jupyter)",
@@ -151,10 +141,7 @@ const INITIAL_RESOURCES = [
     driveUrl: "https://drive.google.com/file/d/demo-ai-lab/view",
     dateAdded: "2026-09-22"
   },
-
-  // 6. Professional Communication and Technical Writing
   {
-    id: "eng-001",
     subject: "Professional Communication and Technical Writing",
     category: "Notes",
     title: "Formal Engineering Proposals, Executive Summaries & SRS Formats",
@@ -163,7 +150,6 @@ const INITIAL_RESOURCES = [
     dateAdded: "2026-09-09"
   },
   {
-    id: "eng-002",
     subject: "Professional Communication and Technical Writing",
     category: "PYQs",
     title: "Technical Writing & Grammar Model Papers (Semester Exam)",
@@ -173,11 +159,8 @@ const INITIAL_RESOURCES = [
   }
 ];
 
-// CR Passcode & Storage Key
 const MASTER_ADMIN_PIN = "cr2026";
-const STORAGE_KEY = "cr_vault_resources_v1";
 
-// Global App State
 let state = {
   resources: [],
   selectedCategory: "All",
@@ -186,12 +169,8 @@ let state = {
   isAdminLoggedIn: false
 };
 
-// DOM Cache Container
 let dom = {};
 
-/**
- * Initializes DOM elements safely after page load
- */
 function initDOM() {
   dom = {
     resourceGrid: document.getElementById("resourceGrid"),
@@ -204,7 +183,6 @@ function initDOM() {
     subjectSelect: document.getElementById("subjectSelectFilter"),
     resetFiltersBtn: document.getElementById("resetFiltersBtn"),
 
-    // Admin Modals & Auth
     openAdminBtn: document.getElementById("openAdminBtn"),
     authModal: document.getElementById("authModal"),
     authForm: document.getElementById("authForm"),
@@ -213,7 +191,6 @@ function initDOM() {
     adminDashboardModal: document.getElementById("adminDashboardModal"),
     adminLogoutBtn: document.getElementById("adminLogoutBtn"),
 
-    // Admin Form & Actions
     addResourceForm: document.getElementById("addResourceForm"),
     adminManageList: document.getElementById("adminManageList"),
     adminTotalItems: document.getElementById("adminTotalItems"),
@@ -225,53 +202,45 @@ function initDOM() {
   };
 }
 
-/**
- * Main Application Bootstrapper
- */
+// Real-Time Cloud Listener
+function setupFirebaseRealtimeSync() {
+  resourcesRef.on("value", (snapshot) => {
+    const data = snapshot.val();
+
+    if (!data) {
+      INITIAL_RESOURCES.forEach((res) => {
+        resourcesRef.push(res);
+      });
+      return;
+    }
+
+    const list = [];
+    Object.keys(data).forEach((key) => {
+      list.push({
+        id: key,
+        ...data[key]
+      });
+    });
+
+    state.resources = list.reverse();
+    render();
+    updateExportPreview();
+  });
+}
+
 function initApp() {
   initDOM();
-  loadData();
   setupEventListeners();
-  render();
+  setupFirebaseRealtimeSync();
 }
 
-/**
- * Data Storage Management
- */
-function loadData() {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    try {
-      state.resources = JSON.parse(stored);
-    } catch (e) {
-      console.warn("Error parsing stored data. Falling back to default mock data.", e);
-      state.resources = [...INITIAL_RESOURCES];
-      saveData();
-    }
-  } else {
-    state.resources = [...INITIAL_RESOURCES];
-    saveData();
-  }
-}
-
-function saveData() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.resources));
-  updateExportPreview();
-}
-
-/**
- * Filter Calculation
- */
 function getFilteredResources() {
   return state.resources.filter(item => {
-    // Category match
     const categoryMatch = (state.selectedCategory === "All") || 
       (state.selectedCategory === "Lab Manuals/Images" ? item.category.includes("Lab") : item.category === state.selectedCategory);
 
-    // Subject match
     const subjectMatch = (state.selectedSubject === "All") || (item.subject === state.selectedSubject);
 
-    // Search query match
     const query = state.searchQuery.trim().toLowerCase();
     const searchMatch = !query || 
       item.title.toLowerCase().includes(query) || 
@@ -282,35 +251,21 @@ function getFilteredResources() {
   });
 }
 
-/**
- * Main Render Function
- */
 function render() {
   const filtered = getFilteredResources();
 
   if (dom.totalCount) dom.totalCount.textContent = state.resources.length;
   if (dom.resultsCount) dom.resultsCount.textContent = `Showing ${filtered.length} of ${state.resources.length} resources`;
 
-  // Search clear button visibility
   if (dom.clearSearchBtn) {
-    if (state.searchQuery.trim() !== "") {
-      dom.clearSearchBtn.classList.remove("hidden");
-    } else {
-      dom.clearSearchBtn.classList.add("hidden");
-    }
+    dom.clearSearchBtn.classList.toggle("hidden", state.searchQuery.trim() === "");
   }
 
-  // Reset filters button visibility
   const isFiltered = state.selectedCategory !== "All" || state.selectedSubject !== "All" || state.searchQuery.trim() !== "";
   if (dom.resetFiltersBtn) {
-    if (isFiltered) {
-      dom.resetFiltersBtn.classList.remove("hidden");
-    } else {
-      dom.resetFiltersBtn.classList.add("hidden");
-    }
+    dom.resetFiltersBtn.classList.toggle("hidden", !isFiltered);
   }
 
-  // Render Grid Cards
   if (dom.resourceGrid) {
     if (filtered.length === 0) {
       dom.resourceGrid.innerHTML = "";
@@ -372,15 +327,12 @@ function createCardHTML(item) {
   `;
 }
 
-/**
- * Admin Panel Table Rendering
- */
 function renderAdminTable() {
   if (!dom.adminManageList) return;
   if (dom.adminTotalItems) dom.adminTotalItems.textContent = state.resources.length;
 
   if (state.resources.length === 0) {
-    dom.adminManageList.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--text-dim);">No resources found.</td></tr>`;
+    dom.adminManageList.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--text-dim);">No resources found in Cloud.</td></tr>`;
     return;
   }
 
@@ -407,16 +359,19 @@ function renderAdminTable() {
   `).join("");
 }
 
-// Global delete handler
+// Delete item permanently from Firebase Cloud for everyone
 window.deleteResource = function(id) {
   const item = state.resources.find(r => r.id === id);
-  const confirmMsg = `Are you sure you want to remove "${item ? item.title : 'this resource'}"?`;
+  const confirmMsg = `Are you sure you want to permanently delete "${item ? item.title : 'this resource'}" from Cloud for everyone?`;
 
   if (confirm(confirmMsg)) {
-    state.resources = state.resources.filter(r => r.id !== id);
-    saveData();
-    render();
-    showToast("Resource successfully removed.", "success");
+    resourcesRef.child(id).remove()
+      .then(() => {
+        showToast("Deleted from Cloud for all students!", "success");
+      })
+      .catch((error) => {
+        showToast("Error deleting: " + error.message, "error");
+      });
   }
 };
 
@@ -426,12 +381,8 @@ function updateExportPreview() {
   }
 }
 
-/**
- * Event Listeners Hub
- */
 function setupEventListeners() {
-
-  // 1. CR Admin Button Click (Safe binding)
+  // CR Admin Modal
   if (dom.openAdminBtn) {
     dom.openAdminBtn.addEventListener("click", () => {
       if (state.isAdminLoggedIn) {
@@ -446,7 +397,7 @@ function setupEventListeners() {
     });
   }
 
-  // 2. Admin Authentication PIN Submission
+  // Admin PIN Auth
   if (dom.authForm) {
     dom.authForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -457,7 +408,7 @@ function setupEventListeners() {
         closeModal(dom.authModal);
         openModal(dom.adminDashboardModal);
         updateExportPreview();
-        showToast("Access Granted! Welcome, Class Representative.", "success");
+        showToast("Welcome CR! Cloud access granted.", "success");
       } else {
         if (dom.authErrorMsg) dom.authErrorMsg.classList.remove("hidden");
         if (dom.adminPinInput) dom.adminPinInput.select();
@@ -465,16 +416,16 @@ function setupEventListeners() {
     });
   }
 
-  // 3. Admin Logout
+  // Logout
   if (dom.adminLogoutBtn) {
     dom.adminLogoutBtn.addEventListener("click", () => {
       state.isAdminLoggedIn = false;
       closeModal(dom.adminDashboardModal);
-      showToast("Logged out of CR Admin Dashboard.", "success");
+      showToast("Logged out of Admin Dashboard.", "success");
     });
   }
 
-  // 4. Live Search
+  // Search
   if (dom.searchInput) {
     dom.searchInput.addEventListener("input", (e) => {
       state.searchQuery = e.target.value;
@@ -482,7 +433,6 @@ function setupEventListeners() {
     });
   }
 
-  // 5. Clear Search Field
   if (dom.clearSearchBtn) {
     dom.clearSearchBtn.addEventListener("click", () => {
       if (dom.searchInput) dom.searchInput.value = "";
@@ -492,7 +442,7 @@ function setupEventListeners() {
     });
   }
 
-  // 6. Category Pill Filter Selection
+  // Categories
   if (dom.categoryFilters) {
     dom.categoryFilters.addEventListener("click", (e) => {
       const pill = e.target.closest(".pill");
@@ -506,7 +456,7 @@ function setupEventListeners() {
     });
   }
 
-  // 7. Subject Select Filter
+  // Subject
   if (dom.subjectSelect) {
     dom.subjectSelect.addEventListener("change", (e) => {
       state.selectedSubject = e.target.value;
@@ -514,7 +464,7 @@ function setupEventListeners() {
     });
   }
 
-  // 8. Reset All Filters
+  // Reset
   if (dom.resetFiltersBtn) {
     dom.resetFiltersBtn.addEventListener("click", () => {
       state.selectedCategory = "All";
@@ -534,8 +484,8 @@ function setupEventListeners() {
     });
   }
 
-  // 9. Add New Resource Form Submission
-    if (dom.addResourceForm) {
+  // Add Resource to Firebase Cloud
+  if (dom.addResourceForm) {
     dom.addResourceForm.addEventListener("submit", (e) => {
       e.preventDefault();
 
@@ -546,12 +496,11 @@ function setupEventListeners() {
       const driveUrl = document.getElementById("resDriveUrl").value.trim();
 
       if (!driveUrl.startsWith("http://") && !driveUrl.startsWith("https://")) {
-        showToast("Please enter a valid Google Drive URL starting with https://", "error");
+        showToast("Please enter a valid URL starting with https://", "error");
         return;
       }
 
       const newResource = {
-        id: "cr-" + Date.now().toString(36) + Math.random().toString(36).substring(2, 5),
         subject,
         category,
         title,
@@ -560,65 +509,62 @@ function setupEventListeners() {
         dateAdded: new Date().toISOString().split("T")[0]
       };
 
-      // Add to beginning of array
-      state.resources.unshift(newResource);
-      saveData();
-      render();
-
-      dom.addResourceForm.reset();
-      showToast("New academic resource added successfully!", "success");
-
-      // Switch to Manage tab to show the newly added resource
-      switchAdminTab("manageResourcesTab");
+      resourcesRef.push(newResource)
+        .then(() => {
+          dom.addResourceForm.reset();
+          showToast("Uploaded to Cloud! Visible to all students immediately.", "success");
+          switchAdminTab("manageResourcesTab");
+        })
+        .catch((error) => {
+          showToast("Upload failed: " + error.message, "error");
+        });
     });
   }
 
-  // 10. Admin Modal Tab Switching
+  // Tabs
   document.querySelectorAll(".tab-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       switchAdminTab(btn.dataset.tab);
     });
   });
 
-  // 11. Download data.json
+  // Export JSON
   if (dom.downloadJsonBtn) {
     dom.downloadJsonBtn.addEventListener("click", () => {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.resources, null, 2));
       const downloadAnchor = document.createElement("a");
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `study_vault_data_${new Date().toISOString().split("T")[0]}.json`);
+      downloadAnchor.setAttribute("download", `study_vault_cloud_${new Date().toISOString().split("T")[0]}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
-      showToast("data.json downloaded successfully.", "success");
+      showToast("data.json downloaded.", "success");
     });
   }
 
-  // 12. Copy Code to Clipboard
   if (dom.copyCodeBtn) {
     dom.copyCodeBtn.addEventListener("click", () => {
       const code = JSON.stringify(state.resources, null, 2);
       navigator.clipboard.writeText(code).then(() => {
-        showToast("Data array copied to clipboard! Paste it into script.js.", "success");
-      }).catch(() => {
-        showToast("Unable to copy to clipboard automatically.", "error");
+        showToast("Data array copied to clipboard!", "success");
       });
     });
   }
 
-  // 13. Reset to Factory Default Mock Data
   if (dom.resetDefaultBtn) {
     dom.resetDefaultBtn.addEventListener("click", () => {
-      if (confirm("Reset repository back to default original sample data? Custom additions will be cleared.")) {
-        state.resources = [...INITIAL_RESOURCES];
-        saveData();
-        render();
-        showToast("Repository reset to initial factory data.", "success");
+      if (confirm("Reset cloud database back to default sample data for all students?")) {
+        resourcesRef.set(null).then(() => {
+          INITIAL_RESOURCES.forEach((res) => {
+            resourcesRef.push(res);
+          });
+          showToast("Cloud Database reset to initial factory data.", "success");
+        });
       }
     });
   }
 
-  // 14. Global Modal Close Triggers (Buttons with data-close)
+  // Modals
   document.querySelectorAll("[data-close]").forEach(el => {
     el.addEventListener("click", () => {
       const targetModal = document.getElementById(el.dataset.close);
@@ -626,14 +572,12 @@ function setupEventListeners() {
     });
   });
 
-  // 15. Backdrop Click to Close
   window.addEventListener("click", (e) => {
     if (e.target.classList.contains("modal-backdrop")) {
       closeModal(e.target);
     }
   });
 
-  // 16. Escape Key to Close
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       if (dom.authModal) closeModal(dom.authModal);
@@ -642,9 +586,6 @@ function setupEventListeners() {
   });
 }
 
-/**
- * Modal Utilities
- */
 function openModal(modalEl) {
   if (!modalEl) return;
   modalEl.classList.add("active");
@@ -669,9 +610,6 @@ function switchAdminTab(targetTabId) {
   }
 }
 
-/**
- * Toast Notifications
- */
 function showToast(message, type = "success") {
   if (!dom.toastContainer) return;
 
@@ -693,9 +631,6 @@ function showToast(message, type = "success") {
   }, 3200);
 }
 
-/**
- * Simple HTML Sanitizer for XSS Prevention
- */
 function escapeHtml(str) {
   if (!str) return "";
   return String(str)
@@ -706,12 +641,8 @@ function escapeHtml(str) {
     .replace(/'/g, "&#039;");
 }
 
-/**
- * Safe Boot on DOMContentLoaded
- */
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initApp);
 } else {
-  // If already loaded
   initApp();
 }
