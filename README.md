@@ -45,7 +45,7 @@ Class-Representative/
 
 1. Clone the Repository
 
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/vivan0788/Class-Representative/tree/main
 
 2. Open the Project
 
